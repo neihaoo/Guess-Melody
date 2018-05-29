@@ -1,7 +1,7 @@
 # Личный проект «Угадай мелодию» [![Build status][travis-image]][travis-url]
 
 * Студент: [Павел Рябкин](https://up.htmlacademy.ru/ecmascript/5/user/505565).
-* Наставник: `Неизвестно`.
+* Наставник: [Александр Махнёв](https://htmlacademy.ru/profile/id7392).
 
 ---
 
