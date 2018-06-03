@@ -1,5 +1,4 @@
-import {getSection} from "./utils.js";
-import {changeScreen} from './utils.js';
+import {getSection, changeScreen} from './utils.js';
 import welcomeScreen from './welcome-screen.js';
 import winScreen from './win-screen.js';
 import timeLoseScreen from './time-lose-screen.js';
@@ -96,20 +95,20 @@ const template = `
 const screen = getSection(template);
 
 const sendButton = screen.querySelector(`.genre-answer-send`);
-const answersInputs = screen.querySelectorAll(`input[name="answer"]`);
+const answerInputs = screen.querySelectorAll(`input[name="answer"]`);
 
 const getRandomScreen = (...screens) => {
   return screens[Math.floor(Math.random() * screens.length)];
 };
 
 const onAnswerInputChange = () => {
-  for (let i = 0; i < answersInputs.length; i++) {
-    if (answersInputs[i].checked && !sendButton.disabled) {
+  for (let i = 0; i < answerInputs.length; i++) {
+    if (answerInputs[i].checked && !sendButton.disabled) {
       break;
-    } else if (answersInputs[i].checked && sendButton.disabled) {
+    } else if (answerInputs[i].checked && sendButton.disabled) {
       sendButton.disabled = false;
       break;
-    } else if (!answersInputs[i].checked && !sendButton.disabled) {
+    } else if (!answerInputs[i].checked && !sendButton.disabled) {
       sendButton.disabled = true;
     }
   }
@@ -117,14 +116,14 @@ const onAnswerInputChange = () => {
 
 const clearAnswers = () => {
   sendButton.disabled = true;
-  answersInputs.forEach((el) => {
+  answerInputs.forEach((el) => {
     el.checked = false;
   });
 };
 
 sendButton.disabled = true;
 
-answersInputs.forEach((el) => {
+answerInputs.forEach((el) => {
   el.addEventListener(`change`, onAnswerInputChange);
 });
 

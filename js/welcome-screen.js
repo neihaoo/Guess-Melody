@@ -1,5 +1,4 @@
-import {getSection} from './utils.js';
-import {changeScreen} from './utils.js';
+import {getSection, changeScreen} from './utils.js';
 import artistScreen from './artist-screen.js';
 
 const template = `

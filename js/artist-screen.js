@@ -1,5 +1,4 @@
-import {getSection} from './utils.js';
-import {changeScreen} from './utils.js';
+import {getSection, changeScreen} from './utils.js';
 import welcomeScreen from './welcome-screen.js';
 import genreScreen from './genre-screen.js';
 
@@ -71,7 +70,6 @@ const template = `
 const screen = getSection(template);
 
 screen.querySelectorAll(`.main-answer`).forEach((el) => {
-
   el.addEventListener(`click`, () => {
     changeScreen(genreScreen);
   });
