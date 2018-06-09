@@ -1,16 +1,16 @@
-const ANSWERS_AMOUNT = 10;
+const MINIMAL_ANSWERS_QUANTITY = 10;
 const FAST_ANSWER_TIME = 30;
 
 const AnswerPoints = {
   RIGHT: 1,
   FAST: 2,
-  WRONG: -2
+  WRONG: 2
 };
 
 export const calculateUserScore = (answers, notes) => {
   let userScore = 0;
 
-  if (answers.length < ANSWERS_AMOUNT) {
+  if (answers.length < MINIMAL_ANSWERS_QUANTITY) {
     return false;
   }
 
@@ -19,7 +19,7 @@ export const calculateUserScore = (answers, notes) => {
       userScore += el.answerTime >= FAST_ANSWER_TIME ? AnswerPoints.RIGHT :
         AnswerPoints.FAST;
     } else {
-      userScore += AnswerPoints.WRONG;
+      userScore -= AnswerPoints.WRONG;
     }
 
     if (el.answerTime < 0) {
