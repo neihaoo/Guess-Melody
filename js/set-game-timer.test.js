@@ -2,11 +2,8 @@ import {assert} from 'chai';
 import {setGameTimer} from './set-game-timer.js';
 
 describe(`Game Timer`, () => {
-  it(`Must return 4 if time equal 5`, () => {
+  it(`Must return correct time`, () => {
     assert.equal(setGameTimer(5).tick().time, 4);
-  });
-
-  it(`Must return 2 if time equal 5`, () => {
     assert.equal(setGameTimer(5).tick().tick().tick().time, 2);
   });
 
