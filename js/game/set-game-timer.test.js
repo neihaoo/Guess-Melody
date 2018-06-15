@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import {setGameTimer} from './set-game-timer.js';
+import {setGameTimer} from './set-game-timer';
 
 describe(`Game Timer`, () => {
   it(`Must return correct time`, () => {

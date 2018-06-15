@@ -1,0 +1,53 @@
+import gameData from './game-melody';
+
+const AnswersCount = {
+  ARTIST: 3,
+  GENRE: 4
+};
+
+const shuffle = (arr) => {
+  for (let i = arr.length; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * i);
+    [arr[i - 1], arr[randomIndex]] = [arr[randomIndex], arr[i - 1]];
+  }
+
+  return arr;
+};
+
+const generateQuestionsList = (data, gameQuestionsLimit) => {
+  const questionsList = [];
+
+  for (let i = 0; i < gameQuestionsLimit; i++) {
+    const type = Math.round(Math.random()) ? `artist` : `genre`;
+    const answers = shuffle(data)
+      .slice(0, type === `artist` ? AnswersCount.ARTIST : AnswersCount.GENRE);
+    const rightAnswer = answers[Math.floor(Math.random() * answers.length)];
+
+    questionsList.push({
+      type,
+      answers,
+      rightAnswer
+    });
+  }
+
+  return questionsList;
+};
+
+export const MINIMAL_ANSWERS_QUANTITY = 10;
+
+export const GameTime = {
+  FAST: 30,
+  LIMIT: 300
+};
+
+export const GAME_NOTES = 3;
+
+export const INITIAL_STATE = Object.freeze({
+  time: GameTime.LIMIT,
+  notes: GAME_NOTES,
+  userScore: [],
+  questions: generateQuestionsList(gameData, MINIMAL_ANSWERS_QUANTITY),
+  currentQuestion: 0
+});
+
+export const gameStats = [];

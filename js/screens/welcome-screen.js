@@ -1,5 +1,6 @@
-import {getSection, changeScreen} from './utils.js';
-import artistScreen from './artist-screen.js';
+import {getSection, changeScreen} from '../utils';
+import {INITIAL_STATE} from '../data/game-data';
+import getScreen from '../game/get-screen';
 
 const template = `
   <section class="main main--welcome">
@@ -17,7 +18,7 @@ const template = `
 const screen = getSection(template);
 
 screen.querySelector(`.main-play`).addEventListener(`click`, () => {
-  changeScreen(artistScreen);
+  changeScreen(getScreen(INITIAL_STATE));
 });
 
 export default screen;
