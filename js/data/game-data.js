@@ -5,6 +5,11 @@ const AnswersCount = {
   GENRE: 4
 };
 
+const QuestionType = {
+  ARTIST: `artist`,
+  GENRE: `genre`
+};
+
 const shuffle = (arr) => {
   for (let i = arr.length; i > 0; i--) {
     const randomIndex = Math.floor(Math.random() * i);
@@ -18,9 +23,9 @@ const generateQuestionsList = (data, gameQuestionsLimit) => {
   const questionsList = [];
 
   for (let i = 0; i < gameQuestionsLimit; i++) {
-    const type = Math.round(Math.random()) ? `artist` : `genre`;
+    const type = Math.round(Math.random()) ? QuestionType.ARTIST : QuestionType.GENRE;
     const answers = shuffle(data)
-      .slice(0, type === `artist` ? AnswersCount.ARTIST : AnswersCount.GENRE);
+      .slice(0, type === QuestionType.ARTIST ? AnswersCount.ARTIST : AnswersCount.GENRE);
     const rightAnswer = answers[Math.floor(Math.random() * answers.length)];
 
     questionsList.push({
