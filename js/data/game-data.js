@@ -38,16 +38,16 @@ const generateQuestionsList = (data, gameQuestionsLimit) => {
   return questionsList;
 };
 
-export const MINIMAL_ANSWERS_QUANTITY = 10;
+const MINIMAL_ANSWERS_QUANTITY = 10;
 
-export const GameTime = {
+const GameTime = {
   FAST: 30,
   LIMIT: 300
 };
 
-export const GAME_NOTES = 3;
+const GAME_NOTES = 3;
 
-export const INITIAL_STATE = Object.freeze({
+const INITIAL_STATE = Object.freeze({
   time: GameTime.LIMIT,
   notes: GAME_NOTES,
   userScore: [],
@@ -55,4 +55,6 @@ export const INITIAL_STATE = Object.freeze({
   currentQuestion: 0
 });
 
-export const gameStats = [];
+const gameStats = [];
+
+export {QuestionType, MINIMAL_ANSWERS_QUANTITY, GameTime, GAME_NOTES, INITIAL_STATE, gameStats};
