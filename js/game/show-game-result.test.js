@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import {showGameResult} from './show-game-result.js';
+import {showGameResult} from './show-game-result';
 
 const playersTotalResults = [
   {
@@ -31,14 +31,14 @@ const createUserTotalResult = (userScore, userNotes, userTime) => ({
 });
 
 describe(`Show Game Result`, () => {
-  it(`Must return «Время вышло! Вы не успели отгадать все мелодии»`, () => {
+  it(`Must return Время вышло!<br>Вы не успели отгадать все мелодии`, () => {
     const userTimeOverResult = createUserTotalResult(10, 3, 0);
-    assert.equal(showGameResult(playersTotalResults, userTimeOverResult), `«Время вышло! Вы не успели отгадать все мелодии»`);
+    assert.equal(showGameResult(playersTotalResults, userTimeOverResult), `Время вышло!<br>Вы не успели отгадать все мелодии`);
   });
 
-  it(`Must return «У вас закончились все попытки. Ничего, повезёт в следующий раз!»`, () => {
+  it(`Must return У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`, () => {
     const userNotesOverResult = createUserTotalResult(10, 0, 5);
-    assert.equal(showGameResult(playersTotalResults, userNotesOverResult), `«У вас закончились все попытки. Ничего, повезёт в следующий раз!»`);
+    assert.equal(showGameResult(playersTotalResults, userNotesOverResult), `У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`);
   });
 
   it(`Must return Вы заняли 2 место из 5 игроков. Это лучше, чем у 60% игроков`, () => {

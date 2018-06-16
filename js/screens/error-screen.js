@@ -1,4 +1,4 @@
-import {getSection} from './utils.js';
+import {getSection} from '../utils';
 
 const template = `
   <section class="modal-error modal-error__wrap">

@@ -2,11 +2,11 @@ export const showGameResult = (otherPlayersTotalResults, userTotalResult) => {
   let userScore = userTotalResult.score;
 
   if (userTotalResult.time === 0) {
-    return `«Время вышло! Вы не успели отгадать все мелодии»`;
+    return `Время вышло!<br>Вы не успели отгадать все мелодии`;
   }
 
-  if (userTotalResult.notes === 0) {
-    return `«У вас закончились все попытки. Ничего, повезёт в следующий раз!»`;
+  if (userTotalResult.notes <= 0) {
+    return `У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`;
   }
 
   const scores = otherPlayersTotalResults.map((el) => el.score);
