@@ -60,6 +60,7 @@ export default (data) => {
   form.addEventListener(`click`, (evt) => {
     if (evt.target.className.includes(`player-control`)) {
       evt.preventDefault();
+      evt.stopPropagation();
 
       const currentAudio = evt.target.parentNode.querySelector(`audio`);
 

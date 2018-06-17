@@ -53,9 +53,10 @@ export default (data) => {
   });
 
   playButton.addEventListener(`click`, (evt) => {
-    const audio = screen.querySelector(`audio`);
-
     evt.preventDefault();
+    evt.stopPropagation();
+
+    const audio = screen.querySelector(`audio`);
 
     if (audio.paused) {
       audio.play();
