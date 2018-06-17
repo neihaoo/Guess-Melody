@@ -52,8 +52,11 @@ export default (data) => {
     evt.target.checked = false;
   });
 
-  playButton.addEventListener(`click`, () => {
+  playButton.addEventListener(`click`, (evt) => {
     const audio = screen.querySelector(`audio`);
+
+    evt.preventDefault();
+
     if (audio.paused) {
       audio.play();
       playButton.classList.replace(`player-control--play`, `player-control--pause`);
