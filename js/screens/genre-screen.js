@@ -59,10 +59,13 @@ export default (data) => {
 
   form.addEventListener(`click`, (evt) => {
     if (evt.target.className.includes(`player-control`)) {
+      evt.preventDefault();
+      evt.stopPropagation();
+
       const currentAudio = evt.target.parentNode.querySelector(`audio`);
 
       for (const i of playButtons) {
-        if (i.parentElement.firstElementChild.played) {
+        if (!i.parentElement.firstElementChild.paused) {
           i.classList.replace(`player-control--pause`, `player-control--play`);
           i.parentElement.firstElementChild.pause();
         }
