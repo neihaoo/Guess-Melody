@@ -30,7 +30,7 @@ export default (data) => `
   </svg>
   <div class="main-mistakes">
     ${new Array(GAME_NOTES - data.notes)
-  .fill(`<img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">`)
-  .join(``)}    
+      .fill(`<img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">`)
+      .join(``)}
   </div>
 `;

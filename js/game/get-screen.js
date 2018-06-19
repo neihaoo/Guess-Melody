@@ -8,7 +8,7 @@ export default (gameState) => {
   const question = gameState.questions[gameState.currentQuestion];
   let screen;
 
-  if (gameState.notes < 0 || gameState.time < 0) {
+  if (gameState.notes === 0 || gameState.time === 0) {
     screen = loseScreen(gameState);
   } else if (gameState.currentQuestion === gameState.questions.length) {
     screen = winScreen(gameState);
