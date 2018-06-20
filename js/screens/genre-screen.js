@@ -7,13 +7,13 @@ export default (data) => {
   const screen = new GenreView(data);
 
   screen.onAnswer = (answers) => {
-    let userNotes;
+    let userNotes = 0;
     let swapScore = [];
     const score = screen.gameState.userScore.slice();
 
-    for (const i of answers) {
-      if (i.checked) {
-        if (i.value === screen.question.rightAnswer.genre) {
+    answers.forEach((el) => {
+      if (el.checked) {
+        if (el.value === screen.question.rightAnswer.genre) {
           swapScore.push({answerState: true, answerTime: 5});
           userNotes = screen.gameState.notes;
         } else {
@@ -22,11 +22,11 @@ export default (data) => {
         }
       }
 
-      if (!i.checked && i.value === screen.question.rightAnswer.genre) {
+      if (!el.checked && el.value === screen.question.rightAnswer.genre) {
         swapScore.push({answerState: false, answerTime: 5});
         userNotes = screen.gameState.notes - 1;
       }
-    }
+    });
 
     const isAnswerWrong = swapScore.find((el) => el.answerState === false);
 
