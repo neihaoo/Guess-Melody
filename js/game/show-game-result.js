@@ -5,7 +5,7 @@ export const showGameResult = (otherPlayersTotalResults, userTotalResult) => {
     return `Время вышло!<br>Вы не успели отгадать все мелодии`;
   }
 
-  if (userTotalResult.notes <= 0) {
+  if (userTotalResult.notes === 0) {
     return `У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`;
   }
 

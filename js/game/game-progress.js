@@ -12,7 +12,7 @@ const splitTime = (time) => {
 
 export default (data) => `
   <a class="play-again play-again__wrap" href="#">
-    <img class="play-again__img" src="/img/melody-logo-ginger.png" alt="logo" width="177" height="76">
+    <img class="play-again__img" src="img/melody-logo-ginger.png" alt="logo" width="177" height="76">
   </a>
   <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
     <circle
@@ -30,7 +30,7 @@ export default (data) => `
   </svg>
   <div class="main-mistakes">
     ${new Array(GAME_NOTES - data.notes)
-  .fill(`<img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">`)
-  .join(``)}    
+      .fill(`<img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">`)
+      .join(``)}
   </div>
 `;
