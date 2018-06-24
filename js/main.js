@@ -1,4 +1,3 @@
-import {changeScreen} from './utils';
-import welcomeScreen from './screens/welcome-screen';
+import Application from './application';
 
-changeScreen(welcomeScreen());
+Application.showWelcome();

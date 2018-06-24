@@ -1,13 +1,13 @@
 import AbstractView from './abstract-view';
-import getGamePlayer from '../game/game-player';
-import getGameProgress from '../game/game-progress';
+import getGamePlayer from '../data/game-player';
+import getGameProgress from '../data/game-progress';
 
 export default class ArtistView extends AbstractView {
-  constructor(gameState) {
+  constructor(gameState, question) {
     super();
 
     this.gameState = gameState;
-    this.question = gameState.questions[gameState.currentQuestion];
+    this.question = question;
   }
 
   get template() {
@@ -46,7 +46,9 @@ export default class ArtistView extends AbstractView {
     playButton.classList.replace(`player-control--play`, `player-control--pause`);
 
     form.addEventListener(`change`, (evt) => {
-      this.onAnswer(evt.target.value);
+      const answer = evt.target.value;
+
+      this.onAnswer(answer);
       evt.target.checked = false;
     });
 

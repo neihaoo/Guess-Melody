@@ -1,13 +1,13 @@
 import AbstractView from './abstract-view';
-import getGamePlayer from '../game/game-player';
-import getGameProgress from '../game/game-progress';
+import getGamePlayer from '../data/game-player';
+import getGameProgress from '../data/game-progress';
 
 export default class GenreView extends AbstractView {
-  constructor(gameState) {
+  constructor(gameState, question) {
     super();
 
     this.gameState = gameState;
-    this.question = gameState.questions[gameState.currentQuestion];
+    this.question = question;
   }
 
   get template() {
@@ -73,12 +73,12 @@ export default class GenreView extends AbstractView {
 
         const currentAudio = evt.target.parentNode.querySelector(`audio`);
 
-        for (const i of playButtons) {
-          if (!i.parentElement.firstElementChild.paused) {
-            i.classList.replace(`player-control--pause`, `player-control--play`);
-            i.parentElement.firstElementChild.pause();
+        playButtons.forEach((el) => {
+          if (!el.parentElement.firstElementChild.paused) {
+            el.classList.replace(`player-control--pause`, `player-control--play`);
+            el.parentElement.firstElementChild.pause();
           }
-        }
+        });
 
         if (currentAudio.paused) {
           currentAudio.play();
@@ -94,7 +94,9 @@ export default class GenreView extends AbstractView {
     });
 
     sendButton.addEventListener(`click`, () => {
-      this.onAnswer(answerInputs);
+      const answer = Array.from(answerInputs).filter((item) => item.checked).map((item) => item.value);
+
+      this.onAnswer(answer);
       clearAnswers();
     });
 

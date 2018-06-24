@@ -1,14 +1,6 @@
-import {GAME_NOTES} from '../data/game-data';
-import {getTimerIndicator} from './get-timer-indicator';
-
-const timerIndicatorRadius = 370;
-
-const splitTime = (time) => {
-  const minutes = Math.round(time / 60);
-  const seconds = `${Math.round(time % 60) < 10 ? `0` : ``}${Math.round(time % 60)}`;
-
-  return {minutes, seconds};
-};
+import {GAME_NOTES, TIMER_INDICATOR_RADIUS} from './game-data';
+import {getTimerIndicator} from '../game/get-timer-indicator';
+import {splitTime} from '../utils';
 
 export default (data) => `
   <a class="play-again play-again__wrap" href="#">
@@ -16,11 +8,11 @@ export default (data) => `
   </a>
   <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
     <circle
-      stroke-dasharray="${getTimerIndicator(data.time, timerIndicatorRadius).stroke}"
-      stroke-dashoffset="${getTimerIndicator(data.time, timerIndicatorRadius).offset}"
-      cx="390" cy="390" r="${timerIndicatorRadius}"
+      stroke-dasharray="${getTimerIndicator(data.time, TIMER_INDICATOR_RADIUS).stroke}"
+      stroke-dashoffset="${getTimerIndicator(data.time, TIMER_INDICATOR_RADIUS).offset}"
+      cx="390" cy="390" r="${TIMER_INDICATOR_RADIUS}"
       class="timer-line"
-      style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
+      style="filter: url(#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
 
     <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
       <span class="timer-value-mins">0${splitTime(data.time).minutes}</span><!--
