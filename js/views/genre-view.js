@@ -1,6 +1,5 @@
 import AbstractView from './abstract-view';
 import getGamePlayer from '../data/game-player';
-import getGameProgress from '../data/game-progress';
 
 export default class GenreView extends AbstractView {
   constructor(gameState, question) {
@@ -13,7 +12,6 @@ export default class GenreView extends AbstractView {
   get template() {
     return `
       <section class="main main--level main--level-genre">
-        ${getGameProgress(this.gameState)}
 
         <div class="main-wrap">
           <h2 class="title">Выберите ${this.question.rightAnswer.genre} треки</h2>
@@ -46,19 +44,6 @@ export default class GenreView extends AbstractView {
     playButtons[0].classList.replace(`player-control--play`, `player-control--pause`);
     sendButton.disabled = true;
 
-    const onAnswerInputChange = () => {
-      for (let i = 0; i < answerInputs.length; i++) {
-        if (answerInputs[i].checked && !sendButton.disabled) {
-          break;
-        } else if (answerInputs[i].checked && sendButton.disabled) {
-          sendButton.disabled = false;
-          break;
-        } else if (!answerInputs[i].checked && !sendButton.disabled) {
-          sendButton.disabled = true;
-        }
-      }
-    };
-
     const clearAnswers = () => {
       sendButton.disabled = true;
       answerInputs.forEach((el) => {
@@ -89,8 +74,8 @@ export default class GenreView extends AbstractView {
       }
     });
 
-    answerInputs.forEach((el) => {
-      el.addEventListener(`change`, onAnswerInputChange);
+    form.addEventListener(`change`, () => {
+      sendButton.disabled = answerInputs.some((el) => el.checked);
     });
 
     sendButton.addEventListener(`click`, () => {

@@ -1,4 +1,4 @@
-import {INITIAL_STATE} from './data/game-data';
+import {INITIAL_STATE} from './game-data';
 
 const getQuestion = (gameState) => gameState.questions[gameState.currentQuestion];
 
@@ -28,18 +28,14 @@ export default class GameModel {
   }
 
   updateState(answer) {
-    const userScore = this._gameState.userScore.slice();
-    userScore.push(answer);
+    const userScore = [...this._gameState.userScore];
+    this._gameState.userScore.push(answer);
     const notes = answer.answerState ? this._gameState.notes : this._gameState.notes - 1;
     this._gameState = Object.assign({}, this._gameState, {userScore, notes});
   }
 
   getCurrentQuestion() {
     return getQuestion(this._gameState);
-  }
-
-  updateTime(time) {
-    this._gameState = Object.assign({}, this._gameState, {time});
   }
 
   updateTime(time) {

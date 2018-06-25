@@ -1,7 +1,7 @@
 import {changeScreen} from './utils';
 import WelcomeScreen from './screens/welcome-screen';
 import GameScreen from './screens/game-screen';
-import GameModel from './game-model';
+import GameModel from './data/game-model';
 
 export default class Application {
 

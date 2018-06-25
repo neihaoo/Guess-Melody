@@ -1,6 +1,5 @@
 import AbstractView from './abstract-view';
 import getGamePlayer from '../data/game-player';
-import getGameProgress from '../data/game-progress';
 
 export default class ArtistView extends AbstractView {
   constructor(gameState, question) {
@@ -13,7 +12,6 @@ export default class ArtistView extends AbstractView {
   get template() {
     return `
       <section class="main main--level main--level-artist">
-        ${getGameProgress(this.gameState)}
       
         <div class="main-wrap">
           <h2 class="title main-title">Кто исполняет эту песню?</h2>
