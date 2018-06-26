@@ -1,5 +1,9 @@
 import gameData from './game-melody';
 
+const MINIMAL_ANSWERS_QUANTITY = 10;
+const GAME_NOTES = 3;
+const TIMER_INDICATOR_RADIUS = 370;
+
 const AnswersCount = {
   ARTIST: 3,
   GENRE: 4
@@ -9,6 +13,13 @@ const QuestionType = {
   ARTIST: `artist`,
   GENRE: `genre`
 };
+
+const GameTime = {
+  FAST: 30,
+  LIMIT: 300
+};
+
+const gameStats = [];
 
 const shuffle = (arr) => {
   for (let i = arr.length; i > 0; i--) {
@@ -38,15 +49,6 @@ const generateQuestionsList = (data, gameQuestionsLimit) => {
   return questionsList;
 };
 
-const MINIMAL_ANSWERS_QUANTITY = 10;
-
-const GameTime = {
-  FAST: 30,
-  LIMIT: 300
-};
-
-const GAME_NOTES = 3;
-
 const INITIAL_STATE = Object.freeze({
   time: GameTime.LIMIT,
   notes: GAME_NOTES,
@@ -55,6 +57,4 @@ const INITIAL_STATE = Object.freeze({
   currentQuestion: 0
 });
 
-const gameStats = [];
-
-export {QuestionType, MINIMAL_ANSWERS_QUANTITY, GameTime, GAME_NOTES, INITIAL_STATE, gameStats};
+export {QuestionType, MINIMAL_ANSWERS_QUANTITY, GameTime, GAME_NOTES, INITIAL_STATE, gameStats, TIMER_INDICATOR_RADIUS};

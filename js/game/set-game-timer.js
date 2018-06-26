@@ -10,7 +10,13 @@ export const setGameTimer = (time) => {
   return {
     time,
     tick() {
-      return setGameTimer(time - 1);
+      this.time--;
+
+      if (this.time > 0) {
+        return this.time;
+      } else {
+        return false;
+      }
     }
   };
 };

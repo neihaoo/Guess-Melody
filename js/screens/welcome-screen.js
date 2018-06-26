@@ -1,14 +1,15 @@
-import {changeScreen} from '../utils';
-import getScreen from '../game/get-screen';
-import {INITIAL_STATE} from '../data/game-data';
 import WelcomeView from '../views/welcome-view';
+import Application from '../application';
 
-export default () => {
-  const screen = new WelcomeView();
+export default class WelcomeScreen {
+  constructor() {
+    this.screen = new WelcomeView();
+    this.screen.onPlayClick = () => {
+      Application.showGame();
+    };
+  }
 
-  screen.onPlayClick = () => {
-    changeScreen(getScreen(INITIAL_STATE));
-  };
-
-  return screen.element;
-};
+  get element() {
+    return this.screen.element;
+  }
+}

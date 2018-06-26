@@ -1,13 +1,14 @@
 import AbstractView from './abstract-view';
-import getGamePlayer from '../game/game-player';
-import getGameProgress from '../game/game-progress';
+import getGamePlayer from '../data/game-player';
+import getGameProgress from '../data/game-progress';
+import {getSection} from '../utils';
 
 export default class GenreView extends AbstractView {
-  constructor(gameState) {
+  constructor(gameState, question) {
     super();
 
     this.gameState = gameState;
-    this.question = gameState.questions[gameState.currentQuestion];
+    this.question = question;
   }
 
   get template() {
@@ -33,6 +34,11 @@ export default class GenreView extends AbstractView {
     `;
   }
 
+  updateProgress(gameState) {
+    const progress = getSection(getGameProgress(gameState));
+    this.element.replaceChild(progress, this.element.firstElementChild);
+  }
+
   onAnswer() {}
 
   onReplayClick() {}
@@ -40,24 +46,11 @@ export default class GenreView extends AbstractView {
   bind() {
     const form = this.element.querySelector(`.genre`);
     const playButtons = this.element.querySelectorAll(`.player-control`);
-    const answerInputs = this.element.querySelectorAll(`input[name="answer"]`);
+    const answerInputs = Array.from(this.element.querySelectorAll(`input[name="answer"]`));
     const sendButton = this.element.querySelector(`.genre-answer-send`);
 
     playButtons[0].classList.replace(`player-control--play`, `player-control--pause`);
     sendButton.disabled = true;
-
-    const onAnswerInputChange = () => {
-      for (let i = 0; i < answerInputs.length; i++) {
-        if (answerInputs[i].checked && !sendButton.disabled) {
-          break;
-        } else if (answerInputs[i].checked && sendButton.disabled) {
-          sendButton.disabled = false;
-          break;
-        } else if (!answerInputs[i].checked && !sendButton.disabled) {
-          sendButton.disabled = true;
-        }
-      }
-    };
 
     const clearAnswers = () => {
       sendButton.disabled = true;
@@ -73,12 +66,12 @@ export default class GenreView extends AbstractView {
 
         const currentAudio = evt.target.parentNode.querySelector(`audio`);
 
-        for (const i of playButtons) {
-          if (!i.parentElement.firstElementChild.paused) {
-            i.classList.replace(`player-control--pause`, `player-control--play`);
-            i.parentElement.firstElementChild.pause();
+        playButtons.forEach((el) => {
+          if (!el.parentElement.firstElementChild.paused) {
+            el.classList.replace(`player-control--pause`, `player-control--play`);
+            el.parentElement.firstElementChild.pause();
           }
-        }
+        });
 
         if (currentAudio.paused) {
           currentAudio.play();
@@ -89,12 +82,14 @@ export default class GenreView extends AbstractView {
       }
     });
 
-    answerInputs.forEach((el) => {
-      el.addEventListener(`change`, onAnswerInputChange);
+    form.addEventListener(`change`, () => {
+      sendButton.disabled = !answerInputs.some((el) => el.checked);
     });
 
     sendButton.addEventListener(`click`, () => {
-      this.onAnswer(answerInputs);
+      const answer = answerInputs.filter((item) => item.checked).map((item) => item.value);
+
+      this.onAnswer(answer);
       clearAnswers();
     });
 
