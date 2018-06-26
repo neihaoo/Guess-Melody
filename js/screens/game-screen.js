@@ -6,14 +6,11 @@ import ArtistView from '../views/artist-view';
 import WinView from '../views/win-view';
 import LoseView from '../views/lose-view';
 import Application from '../application';
-import ProgressView from '../views/progress-view';
 
 export default class GameScreen {
   constructor(model) {
     this.model = model;
-    this.gameProgress = new ProgressView(this.model.gameState);
     this.view = this.getQuestionView(this.model.getCurrentQuestion());
-    this.view.element.insertBefore(this.gameProgress.element, this.view.element.firstChild);
     this._interval = null;
   }
 
@@ -28,7 +25,6 @@ export default class GameScreen {
   showNextQuestion() {
     this.model.nextQuestion();
     this.view = this.getQuestionView(this.model.getCurrentQuestion());
-    this.view.element.insertBefore(this.gameProgress.element, this.view.element.firstChild);
     changeScreen(this.view.element);
     this.startGame();
   }
@@ -59,6 +55,7 @@ export default class GameScreen {
         questionView = new ArtistView(this.model.gameState, question);
 
         questionView.onReplayClick = () => {
+          this.stopGame();
           Application.showWelcome();
         };
 
@@ -73,6 +70,7 @@ export default class GameScreen {
         questionView = new GenreView(this.model.gameState, question);
 
         questionView.onReplayClick = () => {
+          this.stopGame();
           Application.showWelcome();
         };
 
@@ -90,12 +88,6 @@ export default class GameScreen {
     return questionView;
   }
 
-  updateGameProgress() {
-    const gameProgress = new ProgressView(this.model.gameState);
-    this.view.element.replaceChild(gameProgress.element, this.gameProgress.element);
-    this.gameProgress = gameProgress;
-  }
-
   startGame() {
     this._timer = setGameTimer(this.model.gameState.time);
 
@@ -106,7 +98,7 @@ export default class GameScreen {
         this.stopGame();
         Application.showResult(new LoseView(this.model.gameState));
       } else {
-        this.updateGameProgress();
+        this.view.updateProgress(this.model.gameState);
       }
     }, 1000);
   }

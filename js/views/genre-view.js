@@ -1,5 +1,7 @@
 import AbstractView from './abstract-view';
 import getGamePlayer from '../data/game-player';
+import getGameProgress from '../data/game-progress';
+import {getSection} from '../utils';
 
 export default class GenreView extends AbstractView {
   constructor(gameState, question) {
@@ -12,6 +14,7 @@ export default class GenreView extends AbstractView {
   get template() {
     return `
       <section class="main main--level main--level-genre">
+        ${getGameProgress(this.gameState)}
 
         <div class="main-wrap">
           <h2 class="title">Выберите ${this.question.rightAnswer.genre} треки</h2>
@@ -31,6 +34,11 @@ export default class GenreView extends AbstractView {
     `;
   }
 
+  updateProgress(gameState) {
+    const progress = getSection(getGameProgress(gameState));
+    this.element.replaceChild(progress, this.element.firstElementChild);
+  }
+
   onAnswer() {}
 
   onReplayClick() {}
@@ -38,7 +46,7 @@ export default class GenreView extends AbstractView {
   bind() {
     const form = this.element.querySelector(`.genre`);
     const playButtons = this.element.querySelectorAll(`.player-control`);
-    const answerInputs = this.element.querySelectorAll(`input[name="answer"]`);
+    const answerInputs = Array.from(this.element.querySelectorAll(`input[name="answer"]`));
     const sendButton = this.element.querySelector(`.genre-answer-send`);
 
     playButtons[0].classList.replace(`player-control--play`, `player-control--pause`);
@@ -75,11 +83,11 @@ export default class GenreView extends AbstractView {
     });
 
     form.addEventListener(`change`, () => {
-      sendButton.disabled = answerInputs.some((el) => el.checked);
+      sendButton.disabled = !answerInputs.some((el) => el.checked);
     });
 
     sendButton.addEventListener(`click`, () => {
-      const answer = Array.from(answerInputs).filter((item) => item.checked).map((item) => item.value);
+      const answer = answerInputs.filter((item) => item.checked).map((item) => item.value);
 
       this.onAnswer(answer);
       clearAnswers();
