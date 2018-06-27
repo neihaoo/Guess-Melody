@@ -1,7 +1,5 @@
-import {getSection} from '../utils';
-
-const template = `
-  <section class="modal-confirm modal-confirm__wrap">
+export default () => `
+  <section class="modal-confirm modal-confirm__wrap modal-confirm__wrap--hidden">
     <form class="modal-confirm__inner">
       <button class="modal-confirm__close" type="button">Закрыть</button>
       <h2 class="modal-confirm__title">Подтверждение</h2>
@@ -13,7 +11,3 @@ const template = `
     </form>
   </section>
 `;
-
-const screen = getSection(template);
-
-export default screen;

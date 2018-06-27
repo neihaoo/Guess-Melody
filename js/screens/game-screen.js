@@ -54,9 +54,9 @@ export default class GameScreen {
       case QuestionType.ARTIST:
         questionView = new ArtistView(this.model.gameState, question);
 
-        questionView.onReplayClick = () => {
+        questionView.onConfirmClick = () => {
           this.stopGame();
-          Application.showWelcome();
+          Application.launch();
         };
 
         questionView.onAnswer = (answer) => {
@@ -69,9 +69,9 @@ export default class GameScreen {
       case QuestionType.GENRE:
         questionView = new GenreView(this.model.gameState, question);
 
-        questionView.onReplayClick = () => {
+        questionView.onConfirmClick = () => {
           this.stopGame();
-          Application.showWelcome();
+          Application.launch();
         };
 
         questionView.onAnswer = (answers) => {

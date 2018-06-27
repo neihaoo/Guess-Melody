@@ -1,6 +1,7 @@
 import AbstractView from './abstract-view';
 import getGamePlayer from '../data/game-player';
 import getGameProgress from '../data/game-progress';
+import getConfirmModal from '../screens/confirm-screen';
 import {getSection} from '../utils';
 
 export default class GenreView extends AbstractView {
@@ -17,7 +18,7 @@ export default class GenreView extends AbstractView {
         ${getGameProgress(this.gameState)}
 
         <div class="main-wrap">
-          <h2 class="title">Выберите ${this.question.rightAnswer.genre} треки</h2>
+          <h2 class="title">${this.question.question}</h2>
           <form class="genre">
             ${this.question.answers.map((el, i) => `
               <div class="genre-answer">
@@ -30,6 +31,7 @@ export default class GenreView extends AbstractView {
             <button class="genre-answer-send" type="submit">Ответить</button>
           </form>
         </div>
+        ${getConfirmModal()}
       </section>
     `;
   }
@@ -41,7 +43,7 @@ export default class GenreView extends AbstractView {
 
   onAnswer() {}
 
-  onReplayClick() {}
+  onConfirmClick() {}
 
   bind() {
     const form = this.element.querySelector(`.genre`);
@@ -77,6 +79,7 @@ export default class GenreView extends AbstractView {
           currentAudio.play();
           evt.target.classList.replace(`player-control--play`, `player-control--pause`);
         } else {
+          currentAudio.pause();
           evt.target.classList.replace(`player-control--pause`, `player-control--play`);
         }
       }
@@ -95,7 +98,33 @@ export default class GenreView extends AbstractView {
 
     this.element.addEventListener(`click`, (evt) => {
       if (evt.target.closest(`.play-again`)) {
-        this.onReplayClick();
+        const modal = this.element.querySelector(`.modal-confirm`);
+
+        const onModalButtonsClick = (evtModal) => {
+          switch (evtModal.target.textContent) {
+            case `Ок`:
+              evtModal.preventDefault();
+              evtModal.stopPropagation();
+
+              this.onConfirmClick();
+
+              break;
+            case `Отмена`:
+            case `Закрыть`:
+              evtModal.preventDefault();
+              evtModal.stopPropagation();
+
+              modal.classList.add(`modal-confirm__wrap--hidden`);
+              modal.removeEventListener(`click`, onModalButtonsClick);
+
+              break;
+            default:
+              break;
+          }
+        };
+
+        modal.classList.remove(`modal-confirm__wrap--hidden`);
+        modal.addEventListener(`click`, onModalButtonsClick);
       }
     });
   }
