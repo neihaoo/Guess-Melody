@@ -4,6 +4,7 @@ import {QuestionType} from '../data/game-data';
 import GenreView from '../views/genre-view';
 import ArtistView from '../views/artist-view';
 import WinView from '../views/win-view';
+import ConfirmView from '../views/confirm-view';
 import LoseView from '../views/lose-view';
 import Application from '../application';
 
@@ -11,6 +12,7 @@ export default class GameScreen {
   constructor(model) {
     this.model = model;
     this.view = this.getQuestionView(this.model.getCurrentQuestion());
+    this.modalView = new ConfirmView();
     this._interval = null;
   }
 
@@ -20,6 +22,18 @@ export default class GameScreen {
 
   stopGame() {
     clearInterval(this._interval);
+  }
+
+  showModal() {
+    this.modalView.showModal();
+    this.modalView.onConfirmClick = () => {
+      this.stopGame();
+      Application.launch();
+      this.modalView.closeModal();
+    };
+    this.modalView.onCloseClick = () => {
+      this.modalView.closeModal();
+    };
   }
 
   showNextQuestion() {
@@ -55,8 +69,7 @@ export default class GameScreen {
         questionView = new ArtistView(this.model.gameState, question);
 
         questionView.onReplayClick = () => {
-          this.stopGame();
-          Application.showWelcome();
+          this.showModal();
         };
 
         questionView.onAnswer = (answer) => {
@@ -70,8 +83,7 @@ export default class GameScreen {
         questionView = new GenreView(this.model.gameState, question);
 
         questionView.onReplayClick = () => {
-          this.stopGame();
-          Application.showWelcome();
+          this.showModal();
         };
 
         questionView.onAnswer = (answers) => {

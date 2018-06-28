@@ -17,7 +17,7 @@ export default class ArtistView extends AbstractView {
         ${getGameProgress(this.gameState)}
       
         <div class="main-wrap">
-          <h2 class="title main-title">Кто исполняет эту песню?</h2>
+          <h2 class="title main-title">${this.question.question}</h2>
           ${getGamePlayer(this.question.rightAnswer, true)}
           <form class="main-list">
             ${this.question.answers.map((el, i) => `
@@ -75,6 +75,9 @@ export default class ArtistView extends AbstractView {
 
     this.element.addEventListener(`click`, (evt) => {
       if (evt.target.closest(`.play-again`)) {
+        evt.preventDefault();
+        evt.stopPropagation();
+
         this.onReplayClick();
       }
     });

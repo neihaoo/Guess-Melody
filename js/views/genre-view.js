@@ -17,7 +17,7 @@ export default class GenreView extends AbstractView {
         ${getGameProgress(this.gameState)}
 
         <div class="main-wrap">
-          <h2 class="title">Выберите ${this.question.rightAnswer.genre} треки</h2>
+          <h2 class="title">${this.question.question}</h2>
           <form class="genre">
             ${this.question.answers.map((el, i) => `
               <div class="genre-answer">
@@ -77,6 +77,7 @@ export default class GenreView extends AbstractView {
           currentAudio.play();
           evt.target.classList.replace(`player-control--play`, `player-control--pause`);
         } else {
+          currentAudio.pause();
           evt.target.classList.replace(`player-control--pause`, `player-control--play`);
         }
       }
@@ -95,6 +96,9 @@ export default class GenreView extends AbstractView {
 
     this.element.addEventListener(`click`, (evt) => {
       if (evt.target.closest(`.play-again`)) {
+        evt.preventDefault();
+        evt.stopPropagation();
+
         this.onReplayClick();
       }
     });
