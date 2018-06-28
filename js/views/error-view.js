@@ -17,4 +17,8 @@ export default class ErrorView extends AbstractView {
       </section>
     `;
   }
+
+  showModal() {
+    document.querySelector(`body`).appendChild(this.element);
+  }
 }

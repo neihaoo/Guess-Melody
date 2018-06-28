@@ -4,6 +4,7 @@ import WelcomeScreen from './screens/welcome-screen';
 import GameScreen from './screens/game-screen';
 import GameModel from './data/game-model';
 import ErrorView from './views/error-view';
+import {INITIAL_STATE} from './data/game-data';
 
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
@@ -12,8 +13,6 @@ const checkStatus = (response) => {
     throw new Error(`${response.status}: ${response.statusText}`);
   }
 };
-
-let questions;
 
 export default class Application {
 
@@ -35,7 +34,7 @@ export default class Application {
   }
 
   static showGame() {
-    const gameScreen = new GameScreen(new GameModel(questions));
+    const gameScreen = new GameScreen(new GameModel());
     changeScreen(gameScreen.element);
     gameScreen.startGame();
   }
@@ -49,11 +48,12 @@ export default class Application {
 
   static showError(error) {
     const errorView = new ErrorView(error);
-    changeScreen(errorView.element);
+    errorView.showModal();
   }
 
   static startGame(data) {
-    questions = data;
+    INITIAL_STATE.questions.length = 0;
+    data.forEach((el) => INITIAL_STATE.questions.push(el));
     Application.showWelcome().screen.play();
   }
 }

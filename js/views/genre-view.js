@@ -1,7 +1,6 @@
 import AbstractView from './abstract-view';
 import getGamePlayer from '../data/game-player';
 import getGameProgress from '../data/game-progress';
-import getConfirmModal from '../screens/confirm-screen';
 import {getSection} from '../utils';
 
 export default class GenreView extends AbstractView {
@@ -31,7 +30,6 @@ export default class GenreView extends AbstractView {
             <button class="genre-answer-send" type="submit">Ответить</button>
           </form>
         </div>
-        ${getConfirmModal()}
       </section>
     `;
   }
@@ -43,7 +41,7 @@ export default class GenreView extends AbstractView {
 
   onAnswer() {}
 
-  onConfirmClick() {}
+  onReplayClick() {}
 
   bind() {
     const form = this.element.querySelector(`.genre`);
@@ -98,33 +96,10 @@ export default class GenreView extends AbstractView {
 
     this.element.addEventListener(`click`, (evt) => {
       if (evt.target.closest(`.play-again`)) {
-        const modal = this.element.querySelector(`.modal-confirm`);
+        evt.preventDefault();
+        evt.stopPropagation();
 
-        const onModalButtonsClick = (evtModal) => {
-          switch (evtModal.target.textContent) {
-            case `Ок`:
-              evtModal.preventDefault();
-              evtModal.stopPropagation();
-
-              this.onConfirmClick();
-
-              break;
-            case `Отмена`:
-            case `Закрыть`:
-              evtModal.preventDefault();
-              evtModal.stopPropagation();
-
-              modal.classList.add(`modal-confirm__wrap--hidden`);
-              modal.removeEventListener(`click`, onModalButtonsClick);
-
-              break;
-            default:
-              break;
-          }
-        };
-
-        modal.classList.remove(`modal-confirm__wrap--hidden`);
-        modal.addEventListener(`click`, onModalButtonsClick);
+        this.onReplayClick();
       }
     });
   }

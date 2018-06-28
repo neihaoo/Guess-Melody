@@ -3,8 +3,8 @@ import {INITIAL_STATE} from './game-data';
 const getQuestion = (gameState) => gameState.questions[gameState.currentQuestion];
 
 export default class GameModel {
-  constructor(questions) {
-    this.restartGame(questions);
+  constructor() {
+    this.restartGame();
   }
 
   get gameState() {
@@ -23,8 +23,8 @@ export default class GameModel {
     this._gameState.currentQuestion += 1;
   }
 
-  restartGame(questions) {
-    this._gameState = Object.assign({}, INITIAL_STATE, {questions});
+  restartGame() {
+    this._gameState = INITIAL_STATE;
   }
 
   updateState(answer) {
