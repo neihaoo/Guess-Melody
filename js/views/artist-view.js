@@ -48,8 +48,7 @@ export default class ArtistView extends AbstractView {
   bind() {
     const form = this.element.querySelector(`.main-list`);
     const playButton = this.element.querySelector(`.player-control`);
-
-    playButton.classList.replace(`player-control--play`, `player-control--pause`);
+    const audio = this.element.querySelector(`audio`);
 
     form.addEventListener(`change`, (evt) => {
       const answer = evt.target.value;
@@ -58,11 +57,15 @@ export default class ArtistView extends AbstractView {
       evt.target.checked = false;
     });
 
+    audio.addEventListener(`error`, () => {
+      throw new Error(`Failed to download audio`);
+    });
+
+    playButton.classList.replace(`player-control--play`, `player-control--pause`);
+
     playButton.addEventListener(`click`, (evt) => {
       evt.preventDefault();
       evt.stopPropagation();
-
-      const audio = this.element.querySelector(`audio`);
 
       if (audio.paused) {
         audio.play();

@@ -1,4 +1,3 @@
-const MINIMAL_ANSWERS_QUANTITY = 10;
 const GAME_NOTES = 3;
 
 const QuestionType = {
@@ -19,13 +18,9 @@ const INITIAL_STATE = Object.freeze({
   currentQuestion: 0
 });
 
-const gameStats = [];
-
 export {
   QuestionType,
-  MINIMAL_ANSWERS_QUANTITY,
   GameTime,
   GAME_NOTES,
-  INITIAL_STATE,
-  gameStats
+  INITIAL_STATE
 };

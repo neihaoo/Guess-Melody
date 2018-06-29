@@ -68,8 +68,8 @@ export default class GenreView extends AbstractView {
 
         playButtons.forEach((el) => {
           if (!el.parentElement.firstElementChild.paused) {
-            el.classList.replace(`player-control--pause`, `player-control--play`);
             el.parentElement.firstElementChild.pause();
+            el.classList.replace(`player-control--pause`, `player-control--play`);
           }
         });
 

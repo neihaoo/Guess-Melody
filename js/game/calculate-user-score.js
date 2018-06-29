@@ -1,4 +1,6 @@
-import {MINIMAL_ANSWERS_QUANTITY, GameTime} from '../data/game-data';
+import {GameTime} from '../data/game-data';
+
+const MINIMAL_ANSWERS_QUANTITY = 10;
 
 const AnswerPoints = {
   RIGHT: 1,

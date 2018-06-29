@@ -16,7 +16,7 @@ export const showGameResult = (otherPlayersTotalResults, userTotalResult) => {
 
   const playersCount = scores.length;
   const userPlace = scores.indexOf(userScore) + 1;
-  const userPercentResult = (playersCount - userPlace) / playersCount * 100;
+  const userPercentResult = Math.trunc((playersCount - userPlace) / playersCount * 100);
 
   return `Вы заняли ${userPlace} место из ${playersCount} игроков. Это лучше, чем у ${userPercentResult}% игроков`;
 };
