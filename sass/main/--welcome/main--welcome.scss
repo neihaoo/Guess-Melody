@@ -39,7 +39,7 @@
 
 .main-play:disabled {
   animation: pulse 2000ms infinite;
-  border-left-color: lighten($color-orange, 15%);
+  border-left-color: $color-text-grey;
   pointer-events: none;
 }
 

@@ -1,14 +1,14 @@
+import {GAME_NOTES, GameTime} from '../data/game-data';
+import {getSection, getWordForm, splitTime} from '../utils';
 import {calculateUserScore} from '../game/calculate-user-score';
 import {showGameResult} from '../game/show-game-result';
-import {getSection, getWordForm, splitTime} from '../utils';
-import {GAME_NOTES, GameTime} from '../data/game-data';
 import AbstractView from './abstract-view';
 
 export default class WinView extends AbstractView {
   constructor(gameState) {
     super();
 
-    const {userScore, fastScore} = calculateUserScore(gameState.userScore);
+    const {userScore, fastScore} = calculateUserScore(gameState.userScores);
     const {minutes, seconds} = splitTime(GameTime.LIMIT - gameState.time);
 
     this.userScore = userScore;
@@ -55,7 +55,11 @@ export default class WinView extends AbstractView {
     `;
   }
 
-  onReplayClick() {}
+  bind() {
+    this.element.querySelector(`.main-replay`).addEventListener(`click`, () => {
+      this.onReplayClick();
+    });
+  }
 
   showStats(gameStats) {
     const comparisonStats = this.element.querySelector(`.main-comparison`);
@@ -63,9 +67,5 @@ export default class WinView extends AbstractView {
     this.element.replaceChild(getSection(this._statTemplate), comparisonStats.previousElementSibling);
   }
 
-  bind() {
-    this.element.querySelector(`.main-replay`).addEventListener(`click`, () => {
-      this.onReplayClick();
-    });
-  }
+  onReplayClick() {}
 }

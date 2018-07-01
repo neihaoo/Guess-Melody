@@ -22,7 +22,7 @@ export default class Loader {
   }
 
   static loadResults() {
-    return fetch(`${SERVER_URL}/stats/:${APP_ID}`)
+    return fetch(`${SERVER_URL}/stats/${APP_ID}`)
       .then(checkStatus)
       .then(toJSON);
   }
@@ -35,7 +35,7 @@ export default class Loader {
       },
       method: `POST`
     };
-    return fetch(`${SERVER_URL}/stats/:${APP_ID}`, requestSettings)
+    return fetch(`${SERVER_URL}/stats/${APP_ID}`, requestSettings)
       .then(checkStatus);
   }
 }

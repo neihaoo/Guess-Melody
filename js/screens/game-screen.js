@@ -1,12 +1,12 @@
-import {setGameTimer} from '../game/set-game-timer';
+import {GameTime, QuestionType} from '../data/game-data';
 import {changeScreen} from '../utils';
-import {QuestionType} from '../data/game-data';
+import {setGameTimer} from '../game/set-game-timer';
+import Application from '../application';
 import GenreView from '../views/genre-view';
 import ArtistView from '../views/artist-view';
 import WinView from '../views/win-view';
-import ConfirmView from '../views/confirm-view';
 import LoseView from '../views/lose-view';
-import Application from '../application';
+import ConfirmView from '../views/confirm-view';
 
 export default class GameScreen {
   constructor(model) {
@@ -112,6 +112,6 @@ export default class GameScreen {
       } else {
         this.view.updateProgress(this.model.gameState);
       }
-    }, 1000);
+    }, GameTime.STEP);
   }
 }

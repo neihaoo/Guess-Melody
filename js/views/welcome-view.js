@@ -21,16 +21,16 @@ export default class WelcomeView extends AbstractView {
     `;
   }
 
+  bind() {
+    this.element.querySelector(`.main-play`).addEventListener(`click`, () => {
+      this.onPlayClick();
+    });
+  }
+
   play() {
     this.element.querySelector(`.main-play`).removeAttribute(`disabled`);
     this.element.querySelector(`.preload-title`).classList.add(`preload-title--hidden`);
   }
 
   onPlayClick() {}
-
-  bind() {
-    this.element.querySelector(`.main-play`).addEventListener(`click`, () => {
-      this.onPlayClick();
-    });
-  }
 }

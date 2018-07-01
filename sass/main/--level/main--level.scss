@@ -40,6 +40,11 @@ $preview-spacing: 11px;
   position: relative;
   text-align: center;
   width: $preview-size;
+
+  &--disabled {
+    filter: grayscale(1);
+    cursor: not-allowed;
+  }
 }
 
 .main-answer:hover {

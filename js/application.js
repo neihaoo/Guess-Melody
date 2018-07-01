@@ -1,10 +1,10 @@
+import {INITIAL_STATE} from './data/game-data';
 import {changeScreen} from './utils';
 import Loader from './loader';
-import WelcomeScreen from './screens/welcome-screen';
-import GameScreen from './screens/game-screen';
 import GameModel from './data/game-model';
+import GameScreen from './screens/game-screen';
+import WelcomeScreen from './screens/welcome-screen';
 import ErrorView from './views/error-view';
-import {INITIAL_STATE} from './data/game-data';
 
 export default class Application {
 
@@ -13,6 +13,16 @@ export default class Application {
     Loader.loadData()
       .then((data) => Application.startGame(data))
       .catch(Application.showError);
+  }
+
+  static startGame(data) {
+    INITIAL_STATE.questions.length = 0;
+
+    for (const question of data) {
+      INITIAL_STATE.questions.push(question);
+    }
+
+    Application.showWelcome().screen.play();
   }
 
   static showWelcome() {
@@ -47,11 +57,5 @@ export default class Application {
   static showError(error) {
     const errorView = new ErrorView(error);
     errorView.showModal();
-  }
-
-  static startGame(data) {
-    INITIAL_STATE.questions.length = 0;
-    data.forEach((el) => INITIAL_STATE.questions.push(el));
-    Application.showWelcome().screen.play();
   }
 }

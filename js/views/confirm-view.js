@@ -23,18 +23,6 @@ export default class ConfirmView extends AbstractView {
     `;
   }
 
-  showModal() {
-    body.appendChild(this.element);
-  }
-
-  closeModal() {
-    body.removeChild(body.lastElementChild);
-  }
-
-  onConfirmClick() {}
-
-  onCloseClick() {}
-
   bind() {
     const modalButtons = Array.from(this.element.querySelectorAll(`.modal-confirm__btn`));
     const confirmButton = modalButtons.find((el) => el.textContent === `Ок`);
@@ -62,4 +50,16 @@ export default class ConfirmView extends AbstractView {
       this.onCloseClick();
     });
   }
+
+  showModal() {
+    body.appendChild(this.element);
+  }
+
+  closeModal() {
+    body.removeChild(body.lastElementChild);
+  }
+
+  onConfirmClick() {}
+
+  onCloseClick() {}
 }

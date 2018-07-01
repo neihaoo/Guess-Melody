@@ -26,6 +26,11 @@
 
 }
 
+.player-control:disabled {
+  filter: grayscale(1);
+  pointer-events: none;
+}
+
 @keyframes fadein {
   0% {
     opacity: 0

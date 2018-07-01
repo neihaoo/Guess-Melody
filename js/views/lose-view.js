@@ -6,7 +6,7 @@ export default class LoseView extends AbstractView {
   constructor(gameState) {
     super();
 
-    const {userScore} = calculateUserScore(gameState.userScore);
+    const {userScore} = calculateUserScore(gameState.userScores);
 
     this.templateTitle = gameState.notes > 0 ? `Какая жалость!` : `Увы и ах!`;
     this.userResult = {
@@ -28,11 +28,11 @@ export default class LoseView extends AbstractView {
     `;
   }
 
-  onReplayClick() {}
-
   bind() {
     this.element.querySelector(`.main-replay`).addEventListener(`click`, () => {
       this.onReplayClick();
     });
   }
+
+  onReplayClick() {}
 }

@@ -16,20 +16,20 @@ export const calculateUserScore = (answers) => {
     return false;
   }
 
-  answers.forEach((el) => {
-    if (el.answerState) {
-      userScore += el.answerTime >= GameTime.FAST ? AnswerPoints.RIGHT :
+  for (const answer of answers) {
+    if (answer.answerTime < 0) {
+      throw new Error(`Time must be >= 0`);
+    }
+
+    if (answer.answerState) {
+      userScore += answer.answerTime >= GameTime.FAST ? AnswerPoints.RIGHT :
         AnswerPoints.FAST;
-      fastScore += el.answerTime >= GameTime.FAST ? 0 : AnswerPoints.FAST;
+      fastScore += answer.answerTime >= GameTime.FAST ? 0 : AnswerPoints.FAST;
     } else {
       userScore -= userScore > 0 ? AnswerPoints.WRONG : 0;
       fastScore -= fastScore > 0 ? AnswerPoints.WRONG : 0;
     }
-
-    if (el.answerTime < 0) {
-      throw new Error(`Time must be >= 0`);
-    }
-  });
+  }
 
   return {userScore, fastScore};
 };
