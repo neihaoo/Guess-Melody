@@ -1,4 +1,3 @@
-const MINIMAL_ANSWERS_QUANTITY = 10;
 const GAME_NOTES = 3;
 
 const QuestionType = {
@@ -8,24 +7,22 @@ const QuestionType = {
 
 const GameTime = {
   FAST: 30,
-  LIMIT: 300
+  LIMIT: 300,
+  WARNING: 30,
+  STEP: 1000
 };
 
 const INITIAL_STATE = Object.freeze({
   time: GameTime.LIMIT,
   notes: GAME_NOTES,
-  userScore: [],
+  userScores: [],
   questions: [],
   currentQuestion: 0
 });
 
-const gameStats = [];
-
 export {
   QuestionType,
-  MINIMAL_ANSWERS_QUANTITY,
   GameTime,
   GAME_NOTES,
-  INITIAL_STATE,
-  gameStats
+  INITIAL_STATE
 };

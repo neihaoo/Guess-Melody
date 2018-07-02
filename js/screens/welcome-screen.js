@@ -1,5 +1,5 @@
-import WelcomeView from '../views/welcome-view';
 import Application from '../application';
+import WelcomeView from '../views/welcome-view';
 
 export default class WelcomeScreen {
   constructor() {

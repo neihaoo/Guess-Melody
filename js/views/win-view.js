@@ -1,14 +1,14 @@
+import {GAME_NOTES, GameTime} from '../data/game-data';
+import {getSection, getWordForm, splitTime} from '../utils';
 import {calculateUserScore} from '../game/calculate-user-score';
 import {showGameResult} from '../game/show-game-result';
-import {getWordForm, splitTime} from '../utils';
-import {GAME_NOTES, gameStats, GameTime} from '../data/game-data';
 import AbstractView from './abstract-view';
 
 export default class WinView extends AbstractView {
   constructor(gameState) {
     super();
 
-    const {userScore, fastScore} = calculateUserScore(gameState.userScore);
+    const {userScore, fastScore} = calculateUserScore(gameState.userScores);
     const {minutes, seconds} = splitTime(GameTime.LIMIT - gameState.time);
 
     this.userScore = userScore;
@@ -40,21 +40,32 @@ export default class WinView extends AbstractView {
         <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
 
         <h2 class="title">Вы настоящий меломан!</h2>
-        <div class="main-stat">За&nbsp;${this.userTime.minutes}&nbsp;${this.Word.minutes} и ${this.userTime.seconds}&nbsp;${this.Word.seconds}
-          <br>вы&nbsp;набрали ${this.userScore} ${this.Word.points} (${this.fastScore} ${this.Word.fastPoints})
-          <br>совершив ${GAME_NOTES - this.userResult.notes} ${this.Word.errors}</div>
-        <span class="main-comparison">${showGameResult(gameStats, this.userResult)}</span>
+        <div class="main-stat">Идет подсчет результата игры...</div>
+        <span class="main-comparison"></span>
         <span role="button" tabindex="0" class="main-replay">Сыграть ещё раз</span>
       </section>
     `;
   }
 
-  onReplayClick() {}
+  get _statTemplate() {
+    return `
+      <div class="main-stat">За&nbsp;${this.userTime.minutes}&nbsp;${this.Word.minutes} и ${this.userTime.seconds}&nbsp;${this.Word.seconds}
+          <br>вы&nbsp;набрали ${this.userScore} ${this.Word.points} (${this.fastScore} ${this.Word.fastPoints})
+          <br>совершив ${GAME_NOTES - this.userResult.notes} ${this.Word.errors}</div>
+    `;
+  }
 
   bind() {
     this.element.querySelector(`.main-replay`).addEventListener(`click`, () => {
-      gameStats.push(this.userResult);
       this.onReplayClick();
     });
   }
+
+  showStats(gameStats) {
+    const comparisonStats = this.element.querySelector(`.main-comparison`);
+    comparisonStats.textContent = showGameResult(gameStats, this.userResult);
+    this.element.replaceChild(getSection(this._statTemplate), comparisonStats.previousElementSibling);
+  }
+
+  onReplayClick() {}
 }

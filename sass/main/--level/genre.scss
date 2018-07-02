@@ -17,6 +17,11 @@
   background: url("../img/icon-note-inactive.png") no-repeat;
   height: 49px;
   width: 35px;
+
+  &--disabled {
+    filter: grayscale(1);
+    cursor: not-allowed;
+  }
 }
 
 input[type=checkbox]:checked + .genre-answer-check {

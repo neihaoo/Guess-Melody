@@ -1,29 +1,28 @@
-import {changeScreen} from './utils';
-import {adaptServerData} from './data/data-adapter';
-import WelcomeScreen from './screens/welcome-screen';
-import GameScreen from './screens/game-screen';
-import GameModel from './data/game-model';
-import ErrorView from './views/error-view';
 import {INITIAL_STATE} from './data/game-data';
-
-const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  } else {
-    throw new Error(`${response.status}: ${response.statusText}`);
-  }
-};
+import {changeScreen} from './utils';
+import Loader from './loader';
+import GameModel from './data/game-model';
+import GameScreen from './screens/game-screen';
+import WelcomeScreen from './screens/welcome-screen';
+import ErrorView from './views/error-view';
 
 export default class Application {
 
   static launch() {
     Application.showWelcome();
-    window.fetch(`https://es.dump.academy/guess-melody/questions`)
-      .then(checkStatus)
-      .then((response) => response.json())
-      .then((data) => adaptServerData(data))
+    Loader.loadData()
       .then((data) => Application.startGame(data))
       .catch(Application.showError);
+  }
+
+  static startGame(data) {
+    INITIAL_STATE.questions.length = 0;
+
+    for (const question of data) {
+      INITIAL_STATE.questions.push(question);
+    }
+
+    Application.showWelcome().screen.play();
   }
 
   static showWelcome() {
@@ -41,19 +40,22 @@ export default class Application {
 
   static showResult(result) {
     result.onReplayClick = () => {
-      this.showGame();
+      Application.showGame();
     };
-    changeScreen(result.element);
+
+    if (result.userResult.notes > 0 && result.userResult.time > 0) {
+      Loader.loadResults()
+        .then(changeScreen(result.element))
+        .then((data) => result.showStats(data))
+        .then(Loader.saveResults(result.userResult))
+        .catch(Application.showError);
+    } else {
+      changeScreen(result.element);
+    }
   }
 
   static showError(error) {
     const errorView = new ErrorView(error);
     errorView.showModal();
-  }
-
-  static startGame(data) {
-    INITIAL_STATE.questions.length = 0;
-    data.forEach((el) => INITIAL_STATE.questions.push(el));
-    Application.showWelcome().screen.play();
   }
 }

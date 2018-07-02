@@ -28,7 +28,7 @@ export default class GameModel {
   }
 
   updateState(answer) {
-    this._gameState.userScore.push(answer);
+    this._gameState.userScores.push(answer);
     this._gameState.notes = answer.answerState ? this._gameState.notes :
       this._gameState.notes - 1;
   }

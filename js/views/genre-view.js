@@ -1,7 +1,9 @@
-import AbstractView from './abstract-view';
-import getGamePlayer from '../data/game-player';
-import getGameProgress from '../data/game-progress';
+import {GameTime} from '../data/game-data';
 import {getSection} from '../utils';
+import getGameProgress from './game-progress';
+import getGamePlayer from './game-player';
+import Application from '../application';
+import AbstractView from './abstract-view';
 
 export default class GenreView extends AbstractView {
   constructor(gameState, question) {
@@ -21,7 +23,7 @@ export default class GenreView extends AbstractView {
           <form class="genre">
             ${this.question.answers.map((el, i) => `
               <div class="genre-answer">
-                ${getGamePlayer(el, i === 0)}
+                ${getGamePlayer(el)}
                 <input type="checkbox" name="answer" value="${el.genre}" id="a-${i}">
                 <label class="genre-answer-check" for="a-${i}"></label>
               </div>          
@@ -34,30 +36,76 @@ export default class GenreView extends AbstractView {
     `;
   }
 
-  updateProgress(gameState) {
-    const progress = getSection(getGameProgress(gameState));
-    this.element.replaceChild(progress, this.element.firstElementChild);
-  }
-
-  onAnswer() {}
-
-  onReplayClick() {}
-
   bind() {
     const form = this.element.querySelector(`.genre`);
     const playButtons = this.element.querySelectorAll(`.player-control`);
-    const answerInputs = Array.from(this.element.querySelectorAll(`input[name="answer"]`));
+    const audios = Array.from(this.element.querySelectorAll(`audio`));
+    const answersInputs = Array.from(this.element.querySelectorAll(`input[name="answer"]`));
+    const answersLabels = this.element.querySelectorAll(`.genre-answer-check`);
     const sendButton = this.element.querySelector(`.genre-answer-send`);
 
-    playButtons[0].classList.replace(`player-control--play`, `player-control--pause`);
-    sendButton.disabled = true;
+    const playAudio = (track, control) => {
+      const playPromise = track.play();
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => control.classList.replace(`player-control--play`, `player-control--pause`))
+          .catch((error) => error.message);
+      }
+    };
+
+    const pauseAudio = (track, control) => {
+      const playPromise = track.play();
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            track.pause();
+            control.classList.replace(`player-control--pause`, `player-control--play`);
+          })
+          .catch((error) => error.message);
+      }
+    };
 
     const clearAnswers = () => {
       sendButton.disabled = true;
-      answerInputs.forEach((el) => {
-        el.checked = false;
-      });
+
+      for (const answerInput of answersInputs) {
+        answerInput.checked = false;
+      }
     };
+
+    sendButton.disabled = true;
+
+    answersInputs.forEach((el, i) => {
+      el.disabled = true;
+      playButtons[i].disabled = true;
+      answersLabels[i].classList.add(`genre-answer-check--disabled`);
+    });
+
+    audios.forEach((el, i) => {
+      el.addEventListener(`error`, (error) => {
+        Application.showError(error);
+      });
+
+      el.addEventListener(`loadeddata`, () => {
+        if (i === 0) {
+          playAudio(el, playButtons[i]);
+        }
+
+        if (audios.every((it) => it.buffered.length > 0)) {
+          answersInputs.forEach((it, index) => {
+            it.disabled = false;
+            playButtons[index].disabled = false;
+            answersLabels[index].classList.remove(`genre-answer-check--disabled`);
+          });
+        }
+      });
+
+      el.addEventListener(`ended`, () => {
+        pauseAudio(el, playButtons[i]);
+      });
+    });
 
     form.addEventListener(`click`, (evt) => {
       if (evt.target.className.includes(`player-control`)) {
@@ -66,29 +114,26 @@ export default class GenreView extends AbstractView {
 
         const currentAudio = evt.target.parentNode.querySelector(`audio`);
 
-        playButtons.forEach((el) => {
-          if (!el.parentElement.firstElementChild.paused) {
-            el.classList.replace(`player-control--pause`, `player-control--play`);
-            el.parentElement.firstElementChild.pause();
+        for (const playButton of playButtons) {
+          if (!playButton.parentElement.firstElementChild.paused) {
+            pauseAudio(playButton.parentElement.firstElementChild, playButton);
           }
-        });
+        }
 
-        if (currentAudio.paused) {
-          currentAudio.play();
-          evt.target.classList.replace(`player-control--play`, `player-control--pause`);
+        if (!currentAudio.paused) {
+          pauseAudio(currentAudio, evt.target);
         } else {
-          currentAudio.pause();
-          evt.target.classList.replace(`player-control--pause`, `player-control--play`);
+          playAudio(currentAudio, evt.target);
         }
       }
     });
 
     form.addEventListener(`change`, () => {
-      sendButton.disabled = !answerInputs.some((el) => el.checked);
+      sendButton.disabled = !answersInputs.some((el) => el.checked);
     });
 
     sendButton.addEventListener(`click`, () => {
-      const answer = answerInputs.filter((item) => item.checked).map((item) => item.value);
+      const answer = answersInputs.filter((item) => item.checked).map((item) => item.value);
 
       this.onAnswer(answer);
       clearAnswers();
@@ -103,4 +148,17 @@ export default class GenreView extends AbstractView {
       }
     });
   }
+
+  updateProgress(gameState) {
+    const progress = getSection(getGameProgress(gameState));
+    this.element.replaceChild(progress, this.element.firstElementChild);
+
+    if (gameState.time < GameTime.WARNING) {
+      document.querySelector(`.timer-value`).classList.add(`timer-value--finished`);
+    }
+  }
+
+  onAnswer() {}
+
+  onReplayClick() {}
 }

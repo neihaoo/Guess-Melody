@@ -1,7 +1,9 @@
-import AbstractView from './abstract-view';
-import getGamePlayer from '../data/game-player';
-import getGameProgress from '../data/game-progress';
+import {GameTime} from '../data/game-data';
 import {getSection} from '../utils';
+import getGameProgress from './game-progress';
+import getGamePlayer from './game-player';
+import Application from '../application';
+import AbstractView from './abstract-view';
 
 export default class ArtistView extends AbstractView {
   constructor(gameState, question) {
@@ -36,41 +38,78 @@ export default class ArtistView extends AbstractView {
     `;
   }
 
-  updateProgress(gameState) {
-    const progress = getSection(getGameProgress(gameState));
-    this.element.replaceChild(progress, this.element.firstElementChild);
-  }
-
-  onAnswer() {}
-
-  onReplayClick() {}
-
   bind() {
     const form = this.element.querySelector(`.main-list`);
     const playButton = this.element.querySelector(`.player-control`);
+    const answersInputs = this.element.querySelectorAll(`input[name="answer"]`);
+    const answersLabels = this.element.querySelectorAll(`.main-answer`);
+    const audio = this.element.querySelector(`audio`);
 
-    playButton.classList.replace(`player-control--play`, `player-control--pause`);
+    const playAudio = (track, control) => {
+      const playPromise = track.play();
 
-    form.addEventListener(`change`, (evt) => {
-      const answer = evt.target.value;
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => control.classList.replace(`player-control--play`, `player-control--pause`))
+          .catch((error) => error.message);
+      }
+    };
 
-      this.onAnswer(answer);
-      evt.target.checked = false;
+    const pauseAudio = (track, control) => {
+      const playPromise = track.play();
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            track.pause();
+            control.classList.replace(`player-control--pause`, `player-control--play`);
+          })
+          .catch((error) => error.message);
+      }
+    };
+
+    playButton.disabled = true;
+
+    answersInputs.forEach((el, i) => {
+      el.disabled = true;
+      answersLabels[i].classList.add(`main-answer--disabled`);
+    });
+
+    audio.addEventListener(`error`, (error) => {
+      Application.showError(error);
+    });
+
+    audio.addEventListener(`loadeddata`, () => {
+      playButton.disabled = false;
+
+      answersInputs.forEach((el, i) => {
+        el.disabled = false;
+        answersLabels[i].classList.remove(`main-answer--disabled`);
+      });
+
+      playAudio(audio, playButton);
+    });
+
+    audio.addEventListener(`ended`, () => {
+      pauseAudio(audio, playButton);
     });
 
     playButton.addEventListener(`click`, (evt) => {
       evt.preventDefault();
       evt.stopPropagation();
 
-      const audio = this.element.querySelector(`audio`);
-
-      if (audio.paused) {
-        audio.play();
-        playButton.classList.replace(`player-control--play`, `player-control--pause`);
+      if (!audio.paused) {
+        pauseAudio(audio, playButton);
       } else {
-        audio.pause();
-        playButton.classList.replace(`player-control--pause`, `player-control--play`);
+        playAudio(audio, playButton);
       }
+    });
+
+    form.addEventListener(`change`, (evt) => {
+      const answer = evt.target.value;
+
+      this.onAnswer(answer);
+      evt.target.checked = false;
     });
 
     this.element.addEventListener(`click`, (evt) => {
@@ -82,4 +121,17 @@ export default class ArtistView extends AbstractView {
       }
     });
   }
+
+  updateProgress(gameState) {
+    const progress = getSection(getGameProgress(gameState));
+    this.element.replaceChild(progress, this.element.firstElementChild);
+
+    if (gameState.time < GameTime.WARNING) {
+      document.querySelector(`.timer-value`).classList.add(`timer-value--finished`);
+    }
+  }
+
+  onAnswer() {}
+
+  onReplayClick() {}
 }
