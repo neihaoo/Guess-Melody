@@ -43,6 +43,33 @@
   overflow-y: auto;
 }
 
+.preload-game {
+  position: absolute;
+  top: 48%;
+  z-index: 1;
+
+  &--hidden {
+    display: none;
+  }
+}
+
+.preload-question {
+  position: absolute;
+  display:  flex;
+  align-items:  center;
+  justify-content: center;
+  background-color: $color-beige;
+  top: 15%;
+  width: 580px;
+  min-height: 580px;
+  border-radius: 50%;
+  z-index: 1;
+
+  &--hidden {
+    display: none;
+  }
+}
+
 .text {
   color: $color-text-dark;
   display: block;

@@ -43,16 +43,6 @@
   pointer-events: none;
 }
 
-.preload-title {
-  position: absolute;
-  top: 48%;
-  z-index: 1;
-
-  &--hidden {
-    display: none;
-  }
-}
-
 @keyframes pulse {
   0%   { transform: scale(1); }
   50%  { transform: scale(1.1); }

@@ -11,7 +11,7 @@ import ConfirmView from '../views/confirm-view';
 export default class GameScreen {
   constructor(model) {
     this.model = model;
-    this.view = this.getQuestionView(this.model.getCurrentQuestion());
+    this.view = this._getQuestionView(this.model.getCurrentQuestion());
     this.modalView = new ConfirmView();
     this._interval = null;
   }
@@ -20,76 +20,62 @@ export default class GameScreen {
     return this.view.element;
   }
 
-  stopGame() {
+  startGame() {
+    this._timer = setGameTimer(this.model.gameState.time);
+
+    this._interval = setInterval(() => {
+      this.model.updateTime(this._timer.tick());
+
+      if (this.model.isDead()) {
+        this._stopGame();
+        Application.showResult(new LoseView(this.model.gameState));
+      } else {
+        this.view.updateProgress(this.model.gameState);
+      }
+    }, GameTime.STEP);
+  }
+
+  _stopGame() {
     clearInterval(this._interval);
   }
 
-  showModal() {
-    this.modalView.showModal();
-    this.modalView.onConfirmClick = () => {
-      this.stopGame();
-      Application.launch();
-      this.modalView.closeModal();
-    };
-    this.modalView.onCloseClick = () => {
-      this.modalView.closeModal();
-    };
-  }
-
-  showNextQuestion() {
-    this.model.nextQuestion();
-    this.view = this.getQuestionView(this.model.getCurrentQuestion());
-    changeScreen(this.view.element);
-    this.startGame();
-  }
-
-  getNextView() {
-    this.stopGame();
-
-    if (this.model.isDead()) {
-      Application.showResult(new LoseView(this.model.gameState));
-    } else if (this.model.isWon()) {
-      Application.showResult(new WinView(this.model.gameState));
-    } else {
-      this.showNextQuestion();
-    }
-  }
-
-  setAnswer(answer) {
-    const time = this.model.gameState.time;
-    this.model.updateState({answerState: answer, answerTime: time});
-    this.getNextView();
-  }
-
-  getQuestionView(question) {
+  _getQuestionView(question) {
     let questionView;
 
     switch (question.type) {
       case QuestionType.ARTIST:
         questionView = new ArtistView(this.model.gameState, question);
 
+        if (this.model.gameState.debugMode) {
+          questionView.showAnswer();
+        }
+
         questionView.onReplayClick = () => {
-          this.showModal();
+          this._showModal();
         };
 
         questionView.onAnswer = (answer) => {
           const userAnswer = answer === question.rightAnswer.artist;
 
-          this.setAnswer(userAnswer);
+          this._setAnswer(userAnswer);
         };
 
         break;
       case QuestionType.GENRE:
         questionView = new GenreView(this.model.gameState, question);
 
+        if (this.model.gameState.debugMode) {
+          questionView.showAnswer();
+        }
+
         questionView.onReplayClick = () => {
-          this.showModal();
+          this._showModal();
         };
 
         questionView.onAnswer = (answers) => {
           const userAnswer = answers.every((el) => el === this.model.getCurrentQuestion().rightAnswer.genre);
 
-          this.setAnswer(userAnswer);
+          this._setAnswer(userAnswer);
         };
 
         break;
@@ -100,18 +86,40 @@ export default class GameScreen {
     return questionView;
   }
 
-  startGame() {
-    this._timer = setGameTimer(this.model.gameState.time);
+  _showNextQuestion() {
+    this.model.nextQuestion();
+    this.view = this._getQuestionView(this.model.getCurrentQuestion());
+    changeScreen(this.view.element);
+    this.startGame();
+  }
 
-    this._interval = setInterval(() => {
-      this.model.updateTime(this._timer.tick());
+  _getNextView() {
+    this._stopGame();
 
-      if (this.model.isDead()) {
-        this.stopGame();
-        Application.showResult(new LoseView(this.model.gameState));
-      } else {
-        this.view.updateProgress(this.model.gameState);
-      }
-    }, GameTime.STEP);
+    if (this.model.isDead()) {
+      Application.showResult(new LoseView(this.model.gameState));
+    } else if (this.model.isWon()) {
+      Application.showResult(new WinView(this.model.gameState));
+    } else {
+      this._showNextQuestion();
+    }
+  }
+
+  _setAnswer(answer) {
+    const time = this.model.gameState.time;
+    this.model.updateState({answerState: answer, answerTime: time});
+    this._getNextView();
+  }
+
+  _showModal() {
+    this.modalView.showModal();
+    this.modalView.onConfirmClick = () => {
+      this._stopGame();
+      Application.launch();
+      ConfirmView.closeModal();
+    };
+    this.modalView.onCloseClick = () => {
+      ConfirmView.closeModal();
+    };
   }
 }

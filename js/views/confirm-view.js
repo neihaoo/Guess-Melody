@@ -55,11 +55,11 @@ export default class ConfirmView extends AbstractView {
     body.appendChild(this.element);
   }
 
-  closeModal() {
-    body.removeChild(body.lastElementChild);
-  }
-
   onConfirmClick() {}
 
   onCloseClick() {}
+
+  static closeModal() {
+    body.removeChild(body.lastElementChild);
+  }
 }

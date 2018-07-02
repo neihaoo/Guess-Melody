@@ -1,7 +1,8 @@
 import {GameTime} from '../data/game-data';
+import {questionsPreloadTemplate} from './components/preload-questions';
 import {getSection} from '../utils';
-import getGameProgress from './game-progress';
-import getGamePlayer from './game-player';
+import getGameProgress from './components/game-progress';
+import getGamePlayer from './components/game-player';
 import Application from '../application';
 import AbstractView from './abstract-view';
 
@@ -20,7 +21,7 @@ export default class ArtistView extends AbstractView {
       
         <div class="main-wrap">
           <h2 class="title main-title">${this.question.question}</h2>
-          ${getGamePlayer(this.question.rightAnswer, true)}
+          ${getGamePlayer(this.question.rightAnswer)}
           <form class="main-list">
             ${this.question.answers.map((el, i) => `
               <div class="main-answer-wrapper">
@@ -34,6 +35,7 @@ export default class ArtistView extends AbstractView {
             `).join(``)}
          </form>
         </div>
+        ${questionsPreloadTemplate}
       </section>
     `;
   }
@@ -88,6 +90,7 @@ export default class ArtistView extends AbstractView {
       });
 
       playAudio(audio, playButton);
+      this._showQuestion();
     });
 
     audio.addEventListener(`ended`, () => {
@@ -129,6 +132,22 @@ export default class ArtistView extends AbstractView {
     if (gameState.time < GameTime.WARNING) {
       document.querySelector(`.timer-value`).classList.add(`timer-value--finished`);
     }
+  }
+
+  showAnswer() {
+    const answers = this.element.querySelectorAll(`.main-answer`);
+
+    this._showQuestion();
+
+    for (const answer of answers) {
+      if (answer.textContent.trim() === this.question.rightAnswer.artist) {
+        answer.setAttribute(`style`, `outline: 2px dashed red; outline-offset: 4px`);
+      }
+    }
+  }
+
+  _showQuestion() {
+    this.element.querySelector(`.preload-question`).classList.add(`preload-question--hidden`);
   }
 
   onAnswer() {}
