@@ -17,7 +17,8 @@ const INITIAL_STATE = Object.freeze({
   notes: GAME_NOTES,
   userScores: [],
   questions: [],
-  currentQuestion: 0
+  currentQuestion: 0,
+  debugMode: false
 });
 
 export {

@@ -1,5 +1,5 @@
-import {GAME_NOTES} from '../data/game-data';
-import {getTimerIndicator} from '../game/get-timer-indicator';
+import {GAME_NOTES} from '../../data/game-data';
+import {getTimerIndicator} from '../../game/get-timer-indicator';
 
 const TIMER_INDICATOR_RADIUS = 370;
 

@@ -1,7 +1,8 @@
 import {GameTime} from '../data/game-data';
+import {questionsPreloadTemplate} from './components/preload-questions';
 import {getSection} from '../utils';
-import getGameProgress from './game-progress';
-import getGamePlayer from './game-player';
+import getGameProgress from './components/game-progress';
+import getGamePlayer from './components/game-player';
 import Application from '../application';
 import AbstractView from './abstract-view';
 
@@ -32,6 +33,7 @@ export default class GenreView extends AbstractView {
             <button class="genre-answer-send" type="submit">Ответить</button>
           </form>
         </div>
+        ${questionsPreloadTemplate}
       </section>
     `;
   }
@@ -89,16 +91,19 @@ export default class GenreView extends AbstractView {
       });
 
       el.addEventListener(`loadeddata`, () => {
-        if (i === 0) {
-          playAudio(el, playButtons[i]);
-        }
-
         if (audios.every((it) => it.buffered.length > 0)) {
           answersInputs.forEach((it, index) => {
+            if (index === 0) {
+              playAudio(el, playButtons[index]);
+            }
+
             it.disabled = false;
             playButtons[index].disabled = false;
             answersLabels[index].classList.remove(`genre-answer-check--disabled`);
+
           });
+
+          this._showQuestions();
         }
       });
 
@@ -156,6 +161,22 @@ export default class GenreView extends AbstractView {
     if (gameState.time < GameTime.WARNING) {
       document.querySelector(`.timer-value`).classList.add(`timer-value--finished`);
     }
+  }
+
+  showAnswer() {
+    const answers = this.element.querySelectorAll(`input[name="answer"]`);
+
+    this._showQuestions();
+
+    for (const answer of answers) {
+      if (answer.value === this.question.rightAnswer.genre) {
+        answer.parentElement.setAttribute(`style`, `outline: 2px dashed red; outline-offset: 4px`);
+      }
+    }
+  }
+
+  _showQuestions() {
+    this.element.querySelector(`.preload-question`).classList.add(`preload-question--hidden`);
   }
 
   onAnswer() {}

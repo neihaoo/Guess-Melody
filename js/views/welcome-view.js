@@ -9,7 +9,7 @@ export default class WelcomeView extends AbstractView {
     return `
       <section class="main main--welcome">
         <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
-        <p class="title preload-title">Идёт загрузка игры...</p>
+        <p class="title preload-game">Идёт загрузка игры...</p>
         <button class="main-play" disabled>Начать игру</button>
         <h2 class="title main-title">Правила игры</h2>
         <p class="text main-text">
@@ -29,7 +29,7 @@ export default class WelcomeView extends AbstractView {
 
   play() {
     this.element.querySelector(`.main-play`).removeAttribute(`disabled`);
-    this.element.querySelector(`.preload-title`).classList.add(`preload-title--hidden`);
+    this.element.querySelector(`.preload-game`).classList.add(`preload-game--hidden`);
   }
 
   onPlayClick() {}
